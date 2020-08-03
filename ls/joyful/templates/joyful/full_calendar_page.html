@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags i18n %}
+
+{% block content %}
+<div class="content joy-content">
+  <div class="joy-title joy-title--page">
+    <h1>{{ page.title }}</h1>
+  </div>
+  {% block cal_all %}
+  {% block cal_intro %}
+  {{ page.intro|richtext }}
+  {% endblock cal_intro %}
+  {% block fullcalendar %}
+  <div id="joy-fullcalendar" class="joy-cal joy-cal--full" data-version="{{ version }}"></div>
+  {% endblock fullcalendar %}
+  {% block cal_footer %}<div class="joy-export">
+    <a href="{{ request.path }}?format=ical">{% trans "Export iCal" %}</a>
+  </div>{% endblock cal_footer %}
+  {% endblock cal_all %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'joyful/css/vendor/fullcalendar-5.2.0.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'joyful/css/joyful.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'joyful/js/vendor/fullcalendar-5.2.0.min.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('joy-fullcalendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: {
+          code: '{{ language }}',
+          week: {
+            dow: {{ firstDayOfWeek }},
+            doy: {{ daysWithinFirstWeek }}
+          },
+          buttonText: {
+            today: '{% trans "today" %}',
+            month: '{% trans "month" %}',
+            week:  '{% trans "week" %}',
+            day:   '{% trans "day" %}',
+            list:  '{% trans "list" %}'
+          },
+          allDayText:   '{% trans "all-day" %}',
+          moreLinkText: '{% trans "more" %}',
+          noEventsText: '{% trans "No events to display" %}'
+        },
+        initialView: '{{ defaultView }}',
+        headerToolbar: {
+          left:   '',
+          center: 'prev,title,next',
+          right:  'today {{ viewChoices }}'
+        },
+        businessHours: true,
+        dayMaxEvents:  true,
+        events: '{% pageurl page %}events/'
+      });
+
+      calendar.render();
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,4 @@
+pip
+Django
+wagtail
+ls.joyous >= 1.0

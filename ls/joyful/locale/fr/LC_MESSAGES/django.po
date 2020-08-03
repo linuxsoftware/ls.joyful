@@ -1,0 +1,57 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-06 12:55+1200\n"
+"PO-Revision-Date: 2020-08-06 12:55+1200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: models.py:46
+msgid "full calendar page"
+msgstr "page de FullCalendar"
+
+#: models.py:47
+msgid "full calendar pages"
+msgstr "pages de FullCalendar"
+
+#: templates/joyful/full_calendar_page.html:17
+msgid "Export iCal"
+msgstr "Exporter pour iCal"
+
+#: templates/joyful/full_calendar_page.html:42
+msgid "today"
+msgstr "aujourd\\'hui"
+
+#: templates/joyful/full_calendar_page.html:43
+msgid "month"
+msgstr "mois"
+
+#: templates/joyful/full_calendar_page.html:44
+msgid "week"
+msgstr "semaine"
+
+#: templates/joyful/full_calendar_page.html:45
+msgid "day"
+msgstr "journée"
+
+#: templates/joyful/full_calendar_page.html:46
+msgid "list"
+msgstr "liste"
+
+#: templates/joyful/full_calendar_page.html:48
+msgid "all-day"
+msgstr "toute la journée"
+
+#: templates/joyful/full_calendar_page.html:49
+msgid "more"
+msgstr "plus"
+
+#: templates/joyful/full_calendar_page.html:50
+msgid "No events to display"
+msgstr "Aucun événement à afficher"

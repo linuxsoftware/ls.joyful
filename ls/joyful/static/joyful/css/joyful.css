@@ -1,0 +1,77 @@
+/*-----------------------------------------------------------------------*/
+/* Joyful Calendar */
+/*-----------------------------------------------------------------------*/
+
+.joy-content {
+}
+
+.joy-cal {
+}
+
+.joy-cal--full {
+}
+
+.joy-cal--full .fc-toolbar.fc-header-toolbar {
+    margin-bottom:         1px;
+}
+.joy-cal--full .fc-prev-button,
+.joy-cal--full .fc-button.fc-prev-button:focus,
+.joy-cal--full .fc-button.fc-prev-button:hover,
+.joy-cal--full .fc-button.fc-prev-button:active {
+    padding:               0 10px 0 0;
+    height:                32px;
+    border-radius:         .25em 0 0 .25em;
+    vertical-align:        top;
+    box-shadow:            none;
+}
+.joy-cal--full .fc-next-button,
+.joy-cal--full .fc-button.fc-next-button:focus,
+.joy-cal--full .fc-button.fc-next-button:hover,
+.joy-cal--full .fc-button.fc-next-button:active {
+    padding:               0 0 0 10px;
+    height:                32px;
+    border-radius:         0 .25em .25em 0;
+    vertical-align:        top;
+    box-shadow:            none;
+}
+.joy-cal--full .fc-toolbar-title {
+    color:                 white;
+    background-color:      #2C3E50;
+    display:               inline-block;
+    height:                32px;
+    min-width:             20ex;
+    text-align:            center;
+}
+.joy-cal--full h2.fc-toolbar-title {
+    padding:               0;
+}
+
+.joy-cal--full .fc-non-business,
+.joy-cal--full .joy-bg-holiday {
+    background-color:       #f9f9f9;
+    opacity:                1.0;
+}
+.joy-cal--full .joy-bg-holiday .fc-event-title {
+    color:                 #23345c;
+    font-style:            normal;
+}
+
+/* z-index and opacity fix */
+.fc .fc-day-other .fc-daygrid-day-top {
+    opacity:                1.0;
+}
+.fc .fc-day-other .fc-daygrid-day-number {
+    opacity:                0.3;
+}
+
+a.fc-daygrid-day-number:hover,
+a.fc-daygrid-day-number:active {
+    color:                 initial;
+    text-decoration:       none;
+}
+
+.joy-export {
+    padding-top:           22px;
+    font-size:             11px;
+    color:                 #aaa;
+}
