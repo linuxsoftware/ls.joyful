@@ -10,7 +10,8 @@ from django.template.response import TemplateResponse
 from django.utils.translation import get_language, gettext_lazy as _
 from django.utils import timezone
 from ls.joyous.models.calendar import CalendarPage, DatePictures
-from ls.joyous.models import SimpleEventPage, MultidayEventPage, RecurringEventPage
+from ls.joyous.models import (SimpleEventPage, MultidayEventPage,
+                              RecurringEventPage, EventExceptionBase)
 from .utils import getLocalDatetimeAtDate, ProxyPageMixin, getFirstDayOfWeek
 from wagtail.contrib.routable_page.models import route
 from . import __version__
@@ -24,21 +25,54 @@ class FullHoliday(dict):
         self['end']   = date
         self['className'] = "joy-bg-holiday"
 
-class FullEvent(dict):
-    def __init__(self, date, thisEvent):
+class FullEventBase(dict):
+    def __init__(self, thisEvent):
+        super().__init__()
         self['title'] = thisEvent.title
         self['url']   = thisEvent.url
+
+class FullOneOffEvent(FullEventBase):
+    def __init__(self, thisEvent):
+        super().__init__(thisEvent)
+        page = thisEvent.page
+        if page.time_from is None:
+            self['start'] = page._getFromDt().date()
+        else:
+            self['start'] = page._getFromDt()
+        if page.time_to is None:
+            self['end'] = page._getToDt().date() + dt.timedelta(days=1)
+        else:
+            self['end'] = page._getToDt()
+
+class FullRecurringEvent(FullEventBase):
+    def __init__(self, date, thisEvent):
+        super().__init__(thisEvent)
         page = thisEvent.page
         if page.time_from is None:
             self['start'] = date
         else:
             self['start'] = getLocalDatetimeAtDate(date, page.time_from, page.tz)
-        endDate = date + dt.timedelta(days=getattr(page, 'num_days', 1) - 1)
+        endDate = date + dt.timedelta(days=page.num_days - 1)
         if page.time_to is None:
-            self['end'] = endDate
+            self['end'] = endDate + dt.timedelta(days=1)
         else:
             self['end'] = getLocalDatetimeAtDate(endDate, page.time_to, page.tz)
         #TODO? self['groupId'] = page.uid
+
+class FullEventTypeError(TypeError):
+    pass
+
+def makeFullEvent(date, thisEvent):
+    page = thisEvent.page
+    if isinstance(page, (SimpleEventPage, MultidayEventPage)):
+        return FullOneOffEvent(thisEvent)
+
+    elif isinstance(page, (RecurringEventPage, EventExceptionBase)):
+        return FullRecurringEvent(date, thisEvent)
+
+    else:
+        raise FullEventTypeError("Unsupported page type")
+
 
 FULL_VIEWS = {'L': "listYear",
               'M': "dayGridMonth",
@@ -63,7 +97,7 @@ class FullCalendarPage(ProxyPageMixin, CalendarPage):
             if evod.holiday:
                 fullEvents.append(FullHoliday(evod.date, evod.holiday))
             for thisEvent in evod.days_events:
-                fullEvents.append(FullEvent(evod.date, thisEvent))
+                fullEvents.append(makeFullEvent(evod.date, thisEvent))
         return JsonResponse(fullEvents, safe=False)
 
     @route(r"^month/$")
