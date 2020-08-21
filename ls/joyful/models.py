@@ -87,16 +87,21 @@ class FullCalendarPage(ProxyPageMixin, CalendarPage):
     @route(r"^events/$")
     def serveData(self, request):
         try:
-            startDt = dt_parse(request.GET.get('start', ""))
-            endDt   = dt_parse(request.GET.get('end', ""))
+            startDate = dt_parse(request.GET.get('start', "")).date()
+            endDate   = dt_parse(request.GET.get('end', "")).date()
         except ParserError:
             raise Http404("invalid parameters")
         fullEvents = []
-        evods = self._getEventsByDay(request, startDt.date(), endDt.date())
+        evods = self._getEventsByDay(request, startDate, endDate)
         for evod in evods:
             if evod.holiday:
                 fullEvents.append(FullHoliday(evod.date, evod.holiday))
-            for thisEvent in evod.days_events:
+
+            if evod.date == startDate:
+                events = evod.all_events
+            else:
+                events = evod.days_events
+            for thisEvent in events:
                 fullEvents.append(makeFullEvent(evod.date, thisEvent))
         return JsonResponse(fullEvents, safe=False)
 
